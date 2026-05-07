@@ -15,14 +15,16 @@ de $5\%$ a $95\%$ de confiança sobre o ToLD-Br. Este número é diretamente
 verificável e dispensa o uso de amostras por conveniência. \textbf{(Q2)} A
 alocação ótima de Neyman reduz o erro-padrão das estimativas em até $20\%$
 frente à alocação proporcional para o mesmo orçamento $n$, com magnitude
-dependente do estimador adotado. \textbf{(Q3)} Entre os cinco estimadores
-avaliados, o tipo razão combinado apresentou o menor erro absoluto contra a
-verdade populacional ($0{,}69\%$ de $\bar{Y}$); o tipo regressão separado
-apresentou o menor erro-padrão. A baixa correlação observada entre a variável
-auxiliar (\texttt{word\_count}) e a variável-alvo (\texttt{total\_severity})
-limita o ganho da regressão sobre a média estratificada simples ---
-limitação que sugere o uso de auxiliares mais informativos em trabalhos
-futuros.
+dependente do estimador adotado. \textbf{(Q3)} Sob replicação Monte Carlo ($B=500$), a média estratificada
+simples e a regressão combinada empatam pelo menor erro quadrático médio
+($0{,}00115$). O estimador tipo razão combinado, embora exiba o menor erro
+absoluto contra a verdade populacional em uma realização única ($0{,}69\%$
+de $\bar{Y}$), não preserva essa vantagem após replicação. A baixíssima
+correlação populacional ($\rho_{xy} \approx 0{,}011$) entre o auxiliar
+escolhido e a variável-alvo limita drasticamente o ganho da regressão sobre
+a média estratificada --- conforme previsto por Cochran~\cite{cochran1977}~§7.4.
+Esta é uma limitação reconhecida da escolha experimental, e o uso de
+auxiliares mais informativos é apontado como trabalho futuro.
 
 \paragraph{Contribuição à teoria.} Este trabalho fornece uma aplicação
 explícita de Cochran §5.5--§7.11 e Bolfarine \& Bussab §5--§7 a um

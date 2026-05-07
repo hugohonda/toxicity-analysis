@@ -10,7 +10,7 @@ pelo desvio-padrão de $y$ no estrato, redistribui o esforço amostral em
 direção aos estratos com maior variabilidade interna, em particular
 \textit{obscene} e \textit{insult}.
 
-\begin{table}[h]
+\begin{table}[!t]
 \centering
 \small
 \caption{Alocação de $n=378$ entre estratos sob três regimes (ToLD-Br).
@@ -60,8 +60,10 @@ $\bar{Y}=0{,}8591$. Os números desta tabela são ilustrativos --- a
 realização-única exibe variabilidade amostral; a evidência consolidada vem da
 replicação Monte Carlo da \S\ref{sec:results:mc}.
 
-\begin{table}[h]
+\begin{table}[!t]
 \centering
+\small
+\setlength{\tabcolsep}{3pt}
 \caption{Estimadores estratificados de $\bar{Y}$ sob Neyman ($n=378$).}
 \label{tab:estimators}
 \begin{tabular}{lcccc}
@@ -94,7 +96,7 @@ A Tabela~\ref{tab:se-reduction} quantifica a redução de erro-padrão obtida
 pela alocação ótima de Neyman frente à alocação proporcional, mantendo
 $n=378$.
 
-\begin{table}[h]
+\begin{table}[!t]
 \centering
 \caption{Redução percentual no erro-padrão: Neyman vs proporcional.}
 \label{tab:se-reduction}
@@ -102,10 +104,10 @@ $n=378$.
 \toprule
 Estimador          & EP Proporc. & EP Neyman & Redução \\
 \midrule
-Média estratificada & $0{,}0377$ & $0{,}0345$ & $\mathbf{8{,}5\%}$  \\
+Média estratificada & $0{,}0377$ & $0{,}0345$ & $\mathbf{8{,}3\%}$  \\
 Razão separada      & $0{,}0704$ & $0{,}0563$ & $\mathbf{20{,}0\%}$ \\
-Razão combinada     & $0{,}0500$ & $0{,}0489$ & $2{,}2\%$  \\
-Regressão separada  & $0{,}0369$ & $0{,}0342$ & $7{,}3\%$  \\
+Razão combinada     & $0{,}0500$ & $0{,}0489$ & $2{,}3\%$  \\
+Regressão separada  & $0{,}0369$ & $0{,}0342$ & $7{,}2\%$  \\
 Regressão combinada & $0{,}0376$ & $0{,}0345$ & $8{,}2\%$  \\
 \bottomrule
 \end{tabular}
@@ -122,7 +124,7 @@ A Figura~\ref{fig:forest} apresenta o \textit{forest plot} dos cinco
 estimadores com seus IC de $95\%$, sobrepostos à verdade populacional
 (linha vermelha tracejada).
 
-\begin{figure}[h]
+\begin{figure}[!t]
 \centering
 \includegraphics[width=.85\linewidth]{estimators_comparison_neyman.png}
 \caption{Estimativas de $\bar{Y}$ com IC 95\% sob alocação de Neyman.}
@@ -139,9 +141,10 @@ Tabela~\ref{tab:montecarlo} reporta o viés empírico, o desvio-padrão
 empírico das estimativas pontuais, a média do erro-padrão analítico, a
 cobertura empírica do IC $95\%$ e o erro quadrático médio (EQM).
 
-\begin{table}[h]
+\begin{table*}[!t]
 \centering
 \small
+\setlength{\tabcolsep}{6pt}
 \caption{Replicação Monte Carlo ($B=500$): EQM e cobertura.}
 \label{tab:montecarlo}
 \begin{tabular}{llrrrrr}
@@ -161,7 +164,7 @@ Proporc. & regressão sep.    & $-0{,}0024$ & $0{,}0517$ & $0{,}0330$ & $0{,}836
 Proporc. & regressão comb.   &  $0{,}0001$ & $0{,}0367$ & $0{,}0343$ & $0{,}932$ & $0{,}00135$ \\
 \bottomrule
 \end{tabular}
-\end{table}
+\end{table*}
 
 \textbf{Conclusões da Monte Carlo.} (i) Todos os estimadores, exceto razão
 separada, exibem viés empírico desprezível (\(<10^{-3}\)). A razão separada
@@ -169,11 +172,14 @@ herda o viés clássico de razão de Cochran (\S6.10). (ii) O EP analítico de
 grande amostra é bem calibrado para a média estratificada e estimadores
 combinados (razão SD empírico/EP analítico próxima de $1$); subestima a
 variância das versões \textit{separadas} sob proporcional (cobertura
-$83{,}6\%$ contra $95\%$ nominal). (iii) Neyman domina proporcional em EQM
-uniformemente: redução de até $44\%$ na regressão separada e $43\%$ na razão
-separada. (iv) Sob Neyman, a média estratificada e a regressão combinada
-empatam pelo menor EQM ($0{,}00115$); a razão combinada apresenta a melhor
-cobertura ($95{,}6\%$).
+$83{,}6\%$ contra $95\%$ nominal). (iii) Neyman reduz o EQM frente à
+proporcional em \emph{quatro dos cinco} estimadores: $13{,}5\%$ na média
+estratificada, $43{,}1\%$ na razão separada, $43{,}7\%$ na regressão
+separada, $14{,}8\%$ na regressão combinada. A única exceção é a razão
+combinada, em que a diferença ($-0{,}5\%$) não é estatisticamente significativa
+(Wilcoxon $p=0{,}18$, Tabela~\ref{tab:wilcoxon}). (iv) Sob Neyman, a média
+estratificada e a regressão combinada empatam pelo menor EQM ($0{,}00115$); a
+razão combinada apresenta a melhor cobertura ($95{,}6\%$).
 
 \subsubsection*{Significância estatística da redução de erro-padrão}
 
@@ -184,15 +190,16 @@ pares de erros-padrão observados em cada estimador
 (Tabela~\ref{tab:wilcoxon}). A escolha do teste não-paramétrico evita supor
 normalidade da distribuição amostral dos erros-padrão.
 
-\begin{table}[h]
+\begin{table}[!t]
 \centering
 \small
+\setlength{\tabcolsep}{3pt}
 \caption{Teste de Wilcoxon pareado ($H_1$: EP proporcional $>$ EP Neyman),
 $B=500$ replicações.}
 \label{tab:wilcoxon}
 \begin{tabular}{lrrr}
 \toprule
-Estimador & EP prop. (mediana) & EP Ney. (mediana) & valor-$p$ \\
+Estimador & EP prop. (med.) & EP Ney. (med.) & valor-$p$ \\
 \midrule
 média estr.       & $0{,}0342$ & $0{,}0331$ & $\mathbf{1{,}2 \times 10^{-51}}$ \\
 razão sep.        & $0{,}0589$ & $0{,}0524$ & $\mathbf{2{,}4 \times 10^{-83}}$ \\
@@ -221,9 +228,10 @@ categorias como \textit{obscene}, $20{,}2\%$ da população está nesta zona
 ambígua, sugerindo que a binarização por maioria pode subestimar
 sistematicamente a prevalência efetiva de toxicidade.
 
-\begin{table}[h]
+\begin{table*}[!t]
 \centering
 \small
+\setlength{\tabcolsep}{8pt}
 \caption{Diagnóstico de votos disputados (Camada 3.1).}
 \label{tab:noise}
 \begin{tabular}{lrrrrrr}
@@ -238,7 +246,7 @@ Categoria & Votos 0 & Votos 1 & Votos 2 & Votos 3 & Posit. ($\geq 2$) & \% Dispu
 \textit{xenophobia} & 20{,}849 & 109 & 27 & 15 & 42 & 0{,}52\% \\
 \bottomrule
 \end{tabular}
-\end{table}
+\end{table*}
 
 \subsection{Discussão}
 
@@ -260,14 +268,17 @@ de perto pela regressão separada ($0{,}00151$); o razão combinado vem em
 quarto ($0{,}00222$) e o razão separado em último ($0{,}00319$). A
 regressão e a média estratificada são, portanto, equivalentes sob este
 desenho. Esse resultado --- aparentemente decepcionante para a regressão ---
-é coerente com a baixa correlação $\rho_{xy} \approx 0{,}11$ entre
-\texttt{word\_count} e \texttt{total\_severity}, que explica apenas
-$\rho_{xy}^{2} \approx 1{,}2\%$ da variância de $y$. Em outras palavras: o
-auxiliar adotado é demasiado fraco para que a regressão extraia ganho
-material sobre a média estratificada, e o ganho prometido pela teoria
-(Cochran~\cite{cochran1977}~§7) só se manifesta com $\rho_{xy}$
-substancialmente maior. Esta é uma limitação real da escolha experimental
-deste artigo, não da teoria.
+é coerente com a baixíssima correlação populacional
+$\rho_{xy} \approx 0{,}011$ entre \texttt{word\_count} e
+\texttt{total\_severity}, que explica apenas $\rho_{xy}^{2} \approx 0{,}01\%$
+da variância de $y$. Vale notar que as correlações \emph{intra-estrato} são
+maiores --- até $0{,}27$ em \textit{racism} ---, mas o estrato dominante
+\textit{clean} ($N_h \approx 17$ mil) puxa a correlação populacional para
+próximo de zero. Em outras palavras: o auxiliar adotado é demasiado fraco
+para que a regressão extraia ganho material sobre a média estratificada, e o
+ganho prometido pela teoria (Cochran~\cite{cochran1977}~§7) só se manifesta
+com $\rho_{xy}$ substancialmente maior. Esta é uma limitação da escolha
+experimental deste artigo, não da teoria.
 
 \paragraph{Limitações.} (i) Apenas \texttt{word\_count} é avaliada como
 auxiliar; \textit{features} mais ricas (\texttt{caps\_ratio},

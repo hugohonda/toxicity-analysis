@@ -30,18 +30,20 @@ on Intelligent Systems, SBC, Qualis CAPES A4).}%
 
 \author{%
 \IEEEauthorblockN{Hugo Honda Ferreira}
-\IEEEauthorblockA{
-\textit{Programa de P\'os-Gradua\c c\~ao em Inform\'atica}\\
+\IEEEauthorblockA{%
+\textit{Programa de P\'os-Gradua\c{c}\~ao em Inform\'atica}\\
 \textit{Universidade de Bras\'ilia}\\
 Bras\'ilia, Brasil\\
-honda.data.science@gmail.com}
+honda.data.science@gmail.com%
+}
 \and
 \IEEEauthorblockN{Maria Fernanda}
-\IEEEauthorblockA{
-\textit{Programa de P\'os-Gradua\c c\~ao em Inform\'atica}\\
+\IEEEauthorblockA{%
+\textit{Programa de P\'os-Gradua\c{c}\~ao em Inform\'atica}\\
 \textit{Universidade de Bras\'ilia}\\
 Bras\'ilia, Brasil\\
-[email]}
+maria.fernanda@aluno.unb.br%
+}
 }
 
 \begin{document}
@@ -62,10 +64,11 @@ combinado) --- usando \texttt{word\_count} como vari\'avel auxiliar. A
 contribui\c c\~ao principal \'e demonstrar empiricamente, via replica\c c\~ao
 Monte Carlo ($B=500$) e teste de Wilcoxon pareado, que (i) Neyman reduz o
 erro-padr\~ao em at\'e $20\%$ frente \`a aloca\c c\~ao proporcional cl\'assica
-($p<10^{-50}$), (ii) o estimador raz\~ao combinado atinge erro absoluto de
-$0{,}69\%$ contra a verdade populacional, e (iii) o ganho da regress\~ao sobre
-a m\'edia estratificada \'e marginal sob o auxiliar adotado, indicando que a
-escolha de $x$ \'e cr\'itica. O \textit{pipeline} \'e integralmente reproduz\'ivel
+($p<10^{-80}$ para a raz\~ao separada), (ii) sob replica\c c\~ao, a m\'edia
+estratificada e a regress\~ao combinada empatam pelo menor erro quadr\'atico
+m\'edio, e (iii) o ganho da regress\~ao sobre a m\'edia estratificada \'e
+marginal sob o auxiliar adotado ($\rho_{xy} \approx 0{,}011$), indicando que
+a escolha do auxiliar \'e cr\'itica. O \textit{pipeline} \'e integralmente reproduz\'ivel
 em Python e disponibilizado como \textit{open source}.
 \end{abstract}
 

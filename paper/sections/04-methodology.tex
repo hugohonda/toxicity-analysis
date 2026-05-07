@@ -18,7 +18,7 @@ na Tabela~\ref{tab:population}. O desbalanceamento extremo
 (\textit{racism} a $0{,}16\%$, \textit{xenophobia} a $0{,}20\%$) motiva o
 tratamento estratificado.
 
-\begin{table}[h]
+\begin{table}[!t]
 \centering
 \caption{Distribuição populacional do ToLD-Br ($N=21{,}000$, votos $\geq 2$).}
 \label{tab:population}
@@ -36,7 +36,7 @@ Categoria      & Positivos & \% da população \\
 \end{tabular}
 \end{table}
 
-\begin{figure}[h]
+\begin{figure}[!t]
 \centering
 \includegraphics[width=.85\linewidth]{toldbr_label_counts.png}
 \caption{Positivos por categoria sob a regra de maioria ($v \geq 2$).
@@ -64,10 +64,14 @@ anotadores} sobre o \textit{tweet}. A média populacional verdadeira é
 $\bar{Y} = 0{,}8591$.
 
 \paragraph{Variável auxiliar.} Adota-se $x = \texttt{word\_count}$ (contagem
-de palavras), barata de calcular sobre a população completa e correlacionada
-com a intensidade de toxicidade. A correlação de Pearson observada é
-$\rho_{xy} \approx 0{,}11$ na população --- modesta, mas suficiente para
-ilustrar o ganho dos estimadores razão e regressão.
+de palavras), barata de calcular sobre a população completa. A correlação de
+Pearson populacional é $\rho_{xy} \approx 0{,}011$ --- pequena, dominada pelo
+estrato \textit{clean}; as correlações \emph{intra-estrato} são mais
+substanciais (até $0{,}27$ em \textit{racism}). Esta escolha explora
+deliberadamente um auxiliar fraco para examinar o regime em que o ganho
+teórico da regressão sobre a média estratificada deveria desaparecer
+(Cochran~\cite{cochran1977}~§7.4); um auxiliar mais informativo
+(\texttt{caps\_ratio}, \textit{embeddings}) é avaliado como trabalho futuro.
 
 \subsection{Cálculo do tamanho amostral}
 
@@ -83,17 +87,17 @@ $e=0{,}05$:
 
 Três alocações de $n=378$ entre os estratos são comparadas:
 
-\begin{description}
-  \item[Proporcional (Bolfarine \& Bussab):] $n_h = n \cdot N_h/N$. Resulta
-        em $n_h = 1$ para os estratos \textit{racism} e \textit{xenophobia}.
-  \item[Cochran-por-estrato com censo (Cochran §5.5):] Aplicação independente
-        da equação~(\ref{eq:n}) a cada $N_h$, com censo se $n_h \geq N_h$.
-        Total $\approx 1{,}316$ exemplos --- útil como referência alternativa
-        que recupera todos os estratos raros.
-  \item[\textbf{Ótima de Neyman} (Cochran §5.5; Bolfarine \& Bussab §5.5):]
-        equação~(\ref{eq:neyman}). Esta é a alocação adotada como referência
-        principal para a estimação de $\bar{Y}$.
-\end{description}
+\textbf{Proporcional (Bolfarine \& Bussab).} $n_h = n \cdot N_h/N$. Resulta
+em $n_h = 1$ para os estratos \textit{racism} e \textit{xenophobia}.
+
+\textbf{Cochran-por-estrato com censo (Cochran §5.5).} Aplicação
+independente da equação~(\ref{eq:n}) a cada $N_h$, com censo se
+$n_h \geq N_h$. Total $\approx 1{,}299$ exemplos --- útil como referência
+alternativa que recupera todos os estratos raros.
+
+\textbf{Ótima de Neyman (Cochran §5.5; Bolfarine \& Bussab §5.5).}
+Equação~(\ref{eq:neyman}). Esta é a alocação adotada como referência
+principal para a estimação de $\bar{Y}$.
 
 Em qualquer das alocações, a amostragem dentro de cada estrato é
 \textit{aleatória simples sem reposição} (SRS-WOR).
