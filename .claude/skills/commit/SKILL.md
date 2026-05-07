@@ -1,10 +1,10 @@
 ---
 name: commit
 description: |
-  Guided git-commit workflow with approval gates and conventional-commit enforcement. Write commit messages terse and exact. Conventional Commits format. No fluff. Why over what.
-  TRIGGER when: user asks to commit, save work, create a commit, "save these changes",
+  Guided git-commit workflow with approval gates and conventional-commit enforcement. Commits land on the current branch (including main when that is the working branch); pushing is an opt-in final step that always requires explicit user approval. Write commit messages terse and exact. Conventional Commits format. No fluff. Why over what.
+  TRIGGER when: user asks to commit, save work, create a commit, "save these changes", "commit and push",
   or after completing a logical unit of work and wanting it captured.
-  SKIP for: push, amend, rebase, force-push, or branch deletion — those are separate operations.
+  SKIP for: amend, rebase, force-push, or branch deletion — those are separate operations.
 model: sonnet
 ---
 
@@ -16,10 +16,10 @@ Write commit messages terse and exact. Conventional Commits format. No fluff. Wh
 
 Invoke when:
 - User asks to commit, save work, or create a commit
-- User says "commit this", "save these changes"
+- User says "commit this", "save these changes", "commit and push"
 - After completing a logical unit of work
 
-Do NOT invoke for git push, amend, or rebase.
+Do NOT invoke for amend, rebase, or force-push.
 
 ## Workflow
 
@@ -29,12 +29,9 @@ Do NOT invoke for git push, amend, or rebase.
 git branch --show-current
 ```
 
-If on `main`, create a new branch before committing:
-```bash
-git checkout -b <type>/<short-description>
-```
+Show the current branch as part of the commit plan (Step 5). Commits land on the current branch — including `main` when that is the working branch. Do NOT auto-create a feature branch; if the user wants one, they will say so.
 
-Branch naming: `feat/add-summarizer`, `fix/schema-validation`, `chore/update-deps`, `docs/update-readme`.
+Optional branch naming convention when the user asks for one: `feat/add-summarizer`, `fix/schema-validation`, `chore/update-deps`, `docs/update-readme`.
 
 ### Step 1: Check status
 
@@ -76,6 +73,7 @@ Rules:
 
 ### Step 5: Present commit plan
 
+> **Branch:** `<current-branch>`
 > **Proposed commit:**
 > ```
 > feat: add summarizer agent
@@ -102,15 +100,36 @@ Rules:
 
 Confirm: `Committed: <hash> - "<message>"`
 
-### Step 7: Suggest next steps
+### Step 7: Offer push (with explicit approval)
 
-> Next: `git push`, continue working, or `gh pr create`
+After the commit lands, offer to push the current branch:
 
-Do NOT push automatically.
+> **Next:** push `<current-branch>` to remote? (yes / no)
+>
+> If `<current-branch>` is `main`: this publishes directly to the default branch.
+
+If the user says yes:
+
+```bash
+git push          # if upstream is set
+git push -u origin <current-branch>   # first push of a new branch
+```
+
+Rules:
+- **NEVER push without explicit user approval** — even if the user said "commit and push" up front, confirm the branch and target before running `git push`.
+- **NEVER use `--force` or `--force-with-lease`** unless the user has explicitly asked for it in this turn.
+- For `main`, do not require a feature branch, but state plainly that the push goes to the default branch so the user has a chance to redirect.
+- If the push is rejected (non-fast-forward, hook failure, etc.), surface the error and stop. Do NOT auto-pull or auto-force.
+
+If the user says no, suggest the alternatives:
+
+> Alternatives: `git push` later, `gh pr create`, or keep iterating locally.
 
 ## Anti-patterns
 
 - Commit without user approval
+- Push without user approval (even when the user asked for "commit and push" — confirm at the push step)
+- Auto-create a feature branch when the user did not ask
 - Use Co-Authored-By or AI attribution
 - Vague messages ("update", "fix", "changes")
 - Stage all files without reviewing
