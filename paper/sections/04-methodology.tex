@@ -36,6 +36,16 @@ Categoria      & Positivos & \% da população \\
 \end{tabular}
 \end{table}
 
+\begin{figure}[h]
+\centering
+\includegraphics[width=.85\linewidth]{toldbr_label_counts.png}
+\caption{Positivos por categoria sob a regra de maioria ($v \geq 2$).
+A escala destaca o desbalanceamento entre as categorias mais comuns
+(\textit{obscene}, \textit{insult}) e as caudas raras
+(\textit{racism}, \textit{xenophobia}).}
+\label{fig:label-counts}
+\end{figure}
+
 \paragraph{Definição dos estratos.} Como o esquema é multi-rótulo, adota-se a
 regra \textit{raro-vence}: cada \textit{tweet} é alocado ao estrato
 correspondente ao rótulo majoritário positivo mais raro entre os seis ---
