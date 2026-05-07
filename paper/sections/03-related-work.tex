@@ -138,14 +138,15 @@ parâmetros populacionais com erro-padrão controlado. O presente artigo se
 posiciona neste espaço, aplicando alocação de Neyman e estimadores tipo
 razão e regressão de forma reproduzível sobre o ToLD-Br.
 
-\begin{table}[!t]
+\begin{table*}[!t]
 \centering
 \small
+\setlength{\tabcolsep}{8pt}
 \caption{Comparação resumida das abordagens dos trabalhos relacionados.}
 \label{tab:related-comparison}
 \begin{tabular}{lcccc}
 \toprule
-Trabalho & Idioma & Justifica $n$? & Trata caudas raras? & Estima $\bar Y$? \\
+Trabalho & Idioma & Justifica $n$? & Trata caudas raras? & Estima $\bar{Y}$? \\
 \midrule
 \cite{wulczyn2017}        & EN & não & não & não \\
 \cite{borkan2019nuanced}  & EN & não & sim (identidade) & não \\
@@ -154,4 +155,4 @@ Trabalho & Idioma & Justifica $n$? & Trata caudas raras? & Estima $\bar Y$? \\
 \textbf{Este trabalho}    & \textbf{PT} & \textbf{Cochran} & \textbf{Neyman+censo} & \textbf{razão+regressão} \\
 \bottomrule
 \end{tabular}
-\end{table}
+\end{table*}
