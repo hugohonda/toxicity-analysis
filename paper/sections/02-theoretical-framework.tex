@@ -1,0 +1,136 @@
+\section{Referencial Teórico}
+\label{sec:theory}
+
+\subsection{Tamanho amostral por Cochran (1977)}
+\label{sec:theory:cochran}
+
+Para uma população finita de tamanho $N$ e uma variável de interesse com
+proporção populacional $p$ desconhecida, Cochran~\cite{cochran1977} demonstra
+que o tamanho amostral $n_0$ necessário para estimar $p$ com erro de
+amostragem $e$ e confiança $1-\alpha$ em uma população infinita é:
+\begin{equation}
+  n_0 \;=\; \frac{z_{1-\alpha/2}^{2} \cdot p \cdot (1-p)}{e^{2}},
+  \label{eq:n0}
+\end{equation}
+onde $z_{1-\alpha/2}$ é o quantil correspondente da normal padrão. Para
+populações finitas, aplica-se a correção de população finita (FPC):
+\begin{equation}
+  n \;=\; \frac{n_0}{1 + (n_0 - 1)/N}.
+  \label{eq:n}
+\end{equation}
+Adotando o cenário conservador $p=0{,}5$ (que maximiza a variância
+$p(1-p)$), $e=0{,}05$ e $1-\alpha=0{,}95$ (donde $z\approx 1{,}96$),
+obtém-se $n_0 \approx 384$ e, para o ToLD-Br ($N=21{,}000$), $n=378$.
+
+\subsection{Amostragem estratificada sem reposição}
+\label{sec:theory:strat}
+
+A população $\mathcal{U}$ é particionada em $H$ estratos disjuntos
+$\mathcal{U}_1, \dots, \mathcal{U}_H$ com tamanhos $N_1, \dots, N_H$ tais que
+$\sum_{h=1}^{H} N_h = N$. Em cada estrato, sorteia-se uma amostra aleatória
+simples sem reposição de tamanho $n_h$, com $\sum n_h = n$. O peso amostral é
+$W_h = N_h / N$.
+
+\subsubsection{Alocação ótima de Neyman}
+\label{sec:theory:neyman}
+
+A alocação \emph{ótima} (de Neyman) minimiza a variância do estimador
+estratificado da média $\bar{Y}$ para um orçamento total fixo $n$,
+distribuindo $n_h$ proporcionalmente a $N_h \sigma_h$, onde $\sigma_h$ é o
+desvio-padrão de $y$ no estrato $h$~\cite{cochran1977}:
+\begin{equation}
+  n_h \;=\; n \cdot \frac{N_h \sigma_h}{\sum_{i=1}^{H} N_i \sigma_i}.
+  \label{eq:neyman}
+\end{equation}
+Bolfarine \& Bussab~\cite{bolfarine2005} chamam atenção para o caso especial
+em que $\sigma_h$ é constante em $h$: a equação~(\ref{eq:neyman}) reduz-se à
+alocação \textit{proporcional} $n_h = n \cdot W_h$. Quando os $\sigma_h$
+diferem materialmente entre estratos, Neyman pode reduzir substancialmente o
+erro-padrão para o mesmo $n$ --- esta é a hipótese empiricamente avaliada na
+Seção~\ref{sec:results}.
+
+\subsection{Estimadores estratificados de $\bar{Y}$}
+\label{sec:theory:estimators}
+
+Sejam $\bar{y}_h$ e $\bar{x}_h$ as médias amostrais de $y$ e de uma variável
+auxiliar $x$ no estrato $h$; $s_{yh}^2$ e $s_{xh}^2$ as variâncias amostrais;
+$s_{xyh}$ a covariância amostral; $\bar{X}_h$ a média populacional de $x$ no
+estrato (suposta conhecida); $\bar{X}$ a média populacional global; e
+$f_h = n_h / N_h$ a fração amostrada no estrato.
+
+\subsubsection{Média estratificada simples (\textit{baseline})}
+
+\begin{equation}
+  \hat{\bar{Y}}_{st} \;=\; \sum_{h=1}^{H} W_h\,\bar{y}_h,
+  \qquad
+  \widehat{\mathrm{Var}}(\hat{\bar{Y}}_{st}) \;=\;
+   \sum_{h=1}^{H} W_h^{2}\,(1 - f_h)\,\frac{s_{yh}^2}{n_h}.
+  \label{eq:strat-mean}
+\end{equation}
+
+\subsubsection{Estimador tipo razão (Cochran §6.10--6.11)}
+
+A versão \emph{separada} aplica a razão dentro de cada estrato e agrega:
+\begin{equation}
+  \hat{\bar{Y}}_{Rs} \;=\; \sum_{h} W_h\, \frac{\bar{y}_h}{\bar{x}_h}\, \bar{X}_h.
+  \label{eq:ratio-sep}
+\end{equation}
+A versão \emph{combinada} agrega antes da razão:
+\begin{equation}
+  \hat{\bar{Y}}_{Rc} \;=\; \frac{\sum_h W_h \bar{y}_h}{\sum_h W_h \bar{x}_h}\,\bar{X}.
+  \label{eq:ratio-comb}
+\end{equation}
+A variância de grande amostra para a versão separada é~\cite{cochran1977}:
+\begin{equation}
+  \widehat{\mathrm{Var}}(\hat{\bar{Y}}_{Rs}) \;\approx\;
+   \sum_{h} W_h^{2}\,\frac{(1 - f_h)}{n_h}\,
+     \bigl(s_{yh}^{2} - 2\,R_h\,s_{xyh} + R_h^{2}\,s_{xh}^{2}\bigr),
+  \label{eq:ratio-var}
+\end{equation}
+com $R_h = \bar{y}_h / \bar{x}_h$. Expressão análoga, com $R$ global no lugar
+de $R_h$, vale para a versão combinada.
+
+\subsubsection{Estimador tipo regressão (Cochran §7.10--7.11)}
+
+A versão \emph{separada} usa o coeficiente de regressão dentro de cada estrato
+$b_h = s_{xyh}/s_{xh}^{2}$:
+\begin{equation}
+  \hat{\bar{Y}}_{lrs} \;=\; \sum_{h} W_h\,\bigl[\bar{y}_h + b_h(\bar{X}_h - \bar{x}_h)\bigr].
+  \label{eq:reg-sep}
+\end{equation}
+A versão \emph{combinada} estima um coeficiente $b$ ponderado pelos pesos
+estratificados:
+\begin{equation}
+  \hat{\bar{Y}}_{lrc} \;=\; \bar{y}_{st} + b\,(\bar{X} - \bar{x}_{st}),
+  \qquad
+  b \;=\;
+   \frac{\sum_h W_h^{2}\,(1-f_h)\,s_{xyh}/n_h}
+        {\sum_h W_h^{2}\,(1-f_h)\,s_{xh}^{2}/n_h}.
+  \label{eq:reg-comb}
+\end{equation}
+A variância de grande amostra para a versão separada é dada por
+$\widehat{\mathrm{Var}}(\hat{\bar{Y}}_{lrs}) \approx \sum_h W_h^{2}\,(1-f_h)\,
+s_{yh}^{2}(1-r_h^{2})/n_h$, onde $r_h$ é o coeficiente de correlação amostral
+entre $x$ e $y$ no estrato $h$~\cite{cochran1977,lohr1999}.
+
+\subsubsection{Eficiência relativa}
+
+A regressão é, em geral, mais eficiente que a razão quando a relação entre $y$
+e $x$ é aproximadamente linear com intercepto não-nulo; a razão é equivalente
+à regressão se a relação passa pela origem. Em condições idealizadas, ambos
+dominam o estimador da média estratificada simples se $\mathrm{Cor}(x,y)$ é
+não-nula~\cite{cochran1977,thompson2002}.
+
+\subsection{Detecção de toxicidade no ToLD-Br}
+\label{sec:theory:toldbr}
+
+O ToLD-Br~\cite{leite2020} consiste em $21{,}000$ \textit{tweets} em
+português brasileiro, anotados por três avaliadores em seis categorias de
+dano: \textit{homophobia}, \textit{obscene}, \textit{insult}, \textit{racism},
+\textit{misogyny}, \textit{xenophobia}. Cada anotação é um inteiro
+$v_{ij} \in \{0,1,2,3\}$ representando o número de avaliadores que sinalizou a
+categoria $j$ para o \textit{tweet} $i$. A binarização operacional consagrada
+na literatura é $\mathbb{1}[v_{ij} \geq 2]$ (regra de maioria), mas o esquema
+ordinal preserva informação sobre o grau de concordância, útil tanto para
+estratificação quanto para diagnóstico de ruído de
+rotulagem~\cite{leite2020}.

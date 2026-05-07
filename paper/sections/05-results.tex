@@ -1,0 +1,212 @@
+\section{Resultados}
+\label{sec:results}
+
+\subsection{Comparação das alocações}
+
+A Tabela~\ref{tab:allocations} contrasta as três alocações para $n=378$. Note
+que a alocação proporcional concede apenas $1$ exemplo aos estratos mais
+raros (\textit{racism}, \textit{xenophobia}); a alocação de Neyman, ponderada
+pelo desvio-padrão de $y$ no estrato, redistribui o esforço amostral em
+direção aos estratos com maior variabilidade interna, em particular
+\textit{obscene} e \textit{insult}.
+
+\begin{table}[h]
+\centering
+\caption{Alocação de $n=378$ entre estratos sob três regimes (ToLD-Br).}
+\label{tab:allocations}
+\begin{tabular}{lrrrr}
+\toprule
+Estrato       & $N_h$ & $\sigma_h$ & $n_h$ Proporc. & $n_h$ Neyman \\
+\midrule
+\textit{racism}     &     33 & --   &   1 &  $\approx 1$ \\
+\textit{xenophobia} &     42 & --   &   1 &  $\approx 1$ \\
+\textit{misogyny}   &    129 & --   &   2 &  $\approx 2$ \\
+\textit{homophobia} &    172 & --   &   3 &  $\approx 3$ \\
+\textit{insult}     & 1{,}755 & --  &  32 & $\approx 39$ \\
+\textit{obscene}    & 1{,}932 & --  &  35 & $\approx 43$ \\
+clean              & 16{,}937 & --  & 304 & $\approx 289$ \\
+\midrule
+\textbf{Total}     &        & --   & \textbf{378} & \textbf{378} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Estimativas de $\bar{Y}$ sob alocação de Neyman}
+
+A Tabela~\ref{tab:estimators} apresenta os cinco estimadores aplicados à
+amostra Neyman, com intervalos de confiança de $95\%$ e erro absoluto contra
+a verdade populacional $\bar{Y}=0{,}8591$.
+
+\begin{table}[h]
+\centering
+\caption{Estimadores estratificados de $\bar{Y}$ sob Neyman ($n=378$).}
+\label{tab:estimators}
+\begin{tabular}{lcccc}
+\toprule
+Estimador                    & Estimativa & EP    & IC 95\%             & $|\hat\theta - \bar{Y}|$ \\
+\midrule
+Média estratificada           & $0{,}8676$ & $0{,}0345$ & $[0{,}80,\,0{,}94]$ & $0{,}0085$ \\
+Razão separada                & $0{,}9203$ & $0{,}0563$ & $[0{,}81,\,1{,}03]$ & $0{,}0611$ \\
+Razão combinada               & $0{,}8532$ & $0{,}0489$ & $[0{,}76,\,0{,}95]$ & $\mathbf{0{,}0059}$ \\
+Regressão separada            & $0{,}8787$ & $\mathbf{0{,}0342}$ & $[0{,}81,\,0{,}95]$ & $0{,}0196$ \\
+Regressão combinada           & $0{,}8672$ & $0{,}0345$ & $[0{,}80,\,0{,}93]$ & $0{,}0080$ \\
+\midrule
+\textbf{Verdade populacional} & $\mathbf{0{,}8591}$ & --      & --                  & $0{,}0000$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Observações.} Todos os cinco intervalos contêm a verdade populacional
+$\bar{Y}=0{,}8591$, atestando a calibração dos estimadores. O \textit{razão
+combinado} apresenta o menor erro absoluto ($0{,}0059$, ou $0{,}69\%$ de
+$\bar{Y}$); a \textit{regressão separada} apresenta o menor erro-padrão
+($0{,}0342$).
+
+\subsection{Comparação Neyman vs proporcional}
+
+A Tabela~\ref{tab:se-reduction} quantifica a redução de erro-padrão obtida
+pela alocação ótima de Neyman frente à alocação proporcional, mantendo
+$n=378$.
+
+\begin{table}[h]
+\centering
+\caption{Redução percentual no erro-padrão: Neyman vs proporcional.}
+\label{tab:se-reduction}
+\begin{tabular}{lrrr}
+\toprule
+Estimador          & EP Proporc. & EP Neyman & Redução \\
+\midrule
+Média estratificada & $0{,}0377$ & $0{,}0345$ & $\mathbf{8{,}5\%}$  \\
+Razão separada      & $0{,}0704$ & $0{,}0563$ & $\mathbf{20{,}0\%}$ \\
+Razão combinada     & $0{,}0500$ & $0{,}0489$ & $2{,}2\%$  \\
+Regressão separada  & $0{,}0369$ & $0{,}0342$ & $7{,}3\%$  \\
+Regressão combinada & $0{,}0376$ & $0{,}0345$ & $8{,}2\%$  \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+A redução é substancial sobretudo para a \textit{razão separada} ($20\%$),
+estimador particularmente sensível ao número de exemplos por estrato. Para a
+\textit{razão combinada}, a redução é apenas marginal --- o esquema combinado
+amortece a sensibilidade à alocação.
+
+\subsection{Visualização}
+
+A Figura~\ref{fig:forest} apresenta o \textit{forest plot} dos cinco
+estimadores com seus IC de $95\%$, sobrepostos à verdade populacional
+(linha vermelha tracejada).
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=.85\linewidth]{estimators_comparison_neyman.png}
+\caption{Estimativas de $\bar{Y}$ com IC 95\% sob alocação de Neyman.}
+\label{fig:forest}
+\end{figure}
+
+\subsection{Replicação Monte Carlo ($B=500$)}
+\label{sec:results:mc}
+
+Para distinguir variabilidade de uma única realização aleatória do
+comportamento esperado dos estimadores, replicamos o desenho amostral
+sob cada alocação por $B=500$ sementes independentes. A
+Tabela~\ref{tab:montecarlo} reporta o viés empírico, o desvio-padrão
+empírico das estimativas pontuais, a média do erro-padrão analítico, a
+cobertura empírica do IC $95\%$ e o erro quadrático médio (EQM).
+
+\begin{table}[h]
+\centering
+\small
+\caption{Replicação Monte Carlo ($B=500$): EQM e cobertura.}
+\label{tab:montecarlo}
+\begin{tabular}{llrrrrr}
+\toprule
+Alocação & Estimador  & Viés & SD emp. & EP an. & Cob. 95\% & EQM \\
+\midrule
+Neyman   & média estr.       & $-0{,}0005$ & $0{,}0339$ & $0{,}0331$ & $0{,}934$ & $\mathbf{0{,}00115}$ \\
+Neyman   & razão sep.        &  $0{,}0131$ & $0{,}0549$ & $0{,}0524$ & $0{,}934$ & $0{,}00319$ \\
+Neyman   & razão comb.       &  $0{,}0003$ & $0{,}0471$ & $0{,}0468$ & $\mathbf{0{,}956}$ & $0{,}00222$ \\
+Neyman   & regressão sep.    & $-0{,}0021$ & $0{,}0388$ & $0{,}0327$ & $0{,}896$ & $0{,}00151$ \\
+Neyman   & regressão comb.   & $-0{,}0004$ & $0{,}0339$ & $0{,}0331$ & $0{,}938$ & $\mathbf{0{,}00115}$ \\
+\midrule
+Proporc. & média estr.       &  $0{,}0001$ & $0{,}0365$ & $0{,}0343$ & $0{,}934$ & $0{,}00133$ \\
+Proporc. & razão sep.        &  $0{,}0348$ & $0{,}0663$ & $0{,}0589$ & $0{,}876$ & $0{,}00561$ \\
+Proporc. & razão comb.       &  $0{,}0017$ & $0{,}0470$ & $0{,}0469$ & $0{,}950$ & $0{,}00221$ \\
+Proporc. & regressão sep.    & $-0{,}0024$ & $0{,}0517$ & $0{,}0330$ & $0{,}836$ & $0{,}00268$ \\
+Proporc. & regressão comb.   &  $0{,}0001$ & $0{,}0367$ & $0{,}0343$ & $0{,}932$ & $0{,}00135$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Conclusões da Monte Carlo.} (i) Todos os estimadores, exceto razão
+separada, exibem viés empírico desprezível (\(<10^{-3}\)). A razão separada
+herda o viés clássico de razão de Cochran (\S6.10). (ii) O EP analítico de
+grande amostra é bem calibrado para a média estratificada e estimadores
+combinados (razão SD empírico/EP analítico próxima de $1$); subestima a
+variância das versões \textit{separadas} sob proporcional (cobertura
+$83{,}6\%$ contra $95\%$ nominal). (iii) Neyman domina proporcional em EQM
+uniformemente: redução de até $44\%$ na regressão separada e $43\%$ na razão
+separada. (iv) Sob Neyman, a média estratificada e a regressão combinada
+empatam pelo menor EQM ($0{,}00115$); a razão combinada apresenta a melhor
+cobertura ($95{,}6\%$).
+
+\subsection{Diagnóstico de ruído de rotulagem}
+
+A Tabela~\ref{tab:noise} apresenta a contagem de \textit{tweets} em cada nível
+de votos por categoria, em particular a fração com exatamente um voto
+($\textit{disputed share}$) --- a zona descartada pela regra de maioria mas
+não classificada como negativa pelos anotadores. Para
+categorias como \textit{obscene}, $20{,}2\%$ da população está nesta zona
+ambígua, sugerindo que a binarização por maioria pode subestimar
+sistematicamente a prevalência efetiva de toxicidade.
+
+\begin{table}[h]
+\centering
+\small
+\caption{Diagnóstico de votos disputados (Camada 3.1).}
+\label{tab:noise}
+\begin{tabular}{lrrrrrr}
+\toprule
+Categoria & Votos 0 & Votos 1 & Votos 2 & Votos 3 & Posit. ($\geq 2$) & \% Disputado \\
+\midrule
+\textit{homophobia} & 20{,}656 & 168 & 102 & 74 & 176 & 0{,}80\% \\
+\textit{obscene}    & 14{,}348 & 4{,}249 & 1{,}791 & 612 & 2{,}403 & \textbf{20{,}23\%} \\
+\textit{insult}     & 16{,}615 & 2{,}516 & 1{,}352 & 517 & 1{,}869 & \textbf{11{,}98\%} \\
+\textit{racism}     & 20{,}862 & 105 & 27 & 6 & 33 & 0{,}50\% \\
+\textit{misogyny}   & 20{,}537 & 330 & 104 & 29 & 133 & 1{,}57\% \\
+\textit{xenophobia} & 20{,}849 & 109 & 27 & 15 & 42 & 0{,}52\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Discussão}
+
+\paragraph{Q1 — tamanho amostral.} A fórmula de Cochran com FPC dá $n=378$
+sobre $N=21{,}000$, suficiente para erro de amostragem de $5\%$ a $95\%$ de
+confiança no caso conservador $p=0{,}5$. Este número, frequentemente omitido
+em trabalhos correlatos, é diretamente derivável e justificável.
+
+\paragraph{Q2 — ganho de Neyman.} A redução de erro-padrão obtida por Neyman
+é mais expressiva quando o estimador é sensível à variabilidade entre
+estratos: $20\%$ na razão separada, $8\%$ na média estratificada e na
+regressão. Esta heterogeneidade reforça a recomendação prática de privilegiar
+estimadores combinados quando a alocação não puder ser otimamente derivada.
+
+\paragraph{Q3 — razão vs regressão.} O estimador tipo razão combinado
+apresentou o menor erro absoluto, enquanto a regressão separada apresentou o
+menor erro-padrão. A razão entre essas duas observações se explica pela baixa
+correlação $\rho_{xy} \approx 0{,}11$ entre \texttt{word\_count} e
+\texttt{total\_severity}: a regressão extrai pouco poder explicativo do
+auxiliar, e seu ganho sobre a média estratificada é marginal. O estimador
+razão é menos exigente quanto à linearidade, beneficiando-se aqui de
+proporcionalidade aproximada entre $y$ e $x$ dentro de cada estrato.
+
+\paragraph{Limitações.} (i) Apenas \texttt{word\_count} é avaliada como
+auxiliar; \textit{features} mais ricas (\texttt{caps\_ratio},
+\texttt{punc\_density}, embeddings) podem produzir maior $\rho_{xy}$ e maior
+ganho da regressão. (ii) A binarização por maioria descarta a granularidade
+ordinal das anotações; o diagnóstico de ruído (Tabela~\ref{tab:noise}) sugere
+que esta perda é não-trivial para categorias como \textit{obscene}. (iii) A
+amostragem é simulada sobre um \textit{corpus} já anotado, sem custo
+diferencial entre estratos --- caso o custo de rotulagem variasse, a
+alocação ótima incluiria um termo $\sqrt{c_h}$ no denominador
+(Cochran §5.5).

@@ -1,0 +1,69 @@
+% =====================================================================
+%  Auditoria de Alinhamento de IA via Amostragem Probabilística
+%  Compiles as-is with stock LaTeX (article class).
+%  TODO: swap to SBC's class once sbc-template.cls is dropped into ./
+%        \documentclass[12pt]{sbc-template}
+%        and remove this preamble's geometry/abstract overrides.
+% =====================================================================
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[brazil]{babel}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amsmath, amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{cite}
+\usepackage{url}
+\usepackage{microtype}
+
+\graphicspath{{figures/}{../data/processed/figures/}}
+
+\title{Amostragem Estratificada com Alocação de Neyman e Estimadores tipo Razão e Regressão para Auditoria de Datasets de Toxicidade:\\ um Estudo de Caso sobre o ToLD-Br}
+
+\author{%
+  Hugo Honda \\ \texttt{hugo.honda@toptal.com} \and
+  [Coautor/a] \\ \texttt{[email]}%
+}
+
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Este artigo investiga em que medida a auditoria estatística de \textit{datasets}
+de toxicidade pode ser conduzida com rigor amostral a partir de
+\textit{subcorpus} representativos. Aplica-se amostragem estratificada sem
+reposição sobre o ToLD-Br~\cite{leite2020} ($N=21{,}000$ tweets em português
+brasileiro, seis categorias de dano), com tamanho amostral
+$n=378$ derivado da fórmula de Cochran~\cite{cochran1977} e \textbf{alocação
+ótima de Neyman}~\cite{cochran1977,bolfarine2005}. O parâmetro populacional
+$\bar{Y}$ (severidade total agregada) é estimado por cinco métodos sob desenho
+estratificado --- média estratificada, estimador tipo razão (separado e
+combinado) e estimador tipo regressão (separado e combinado) --- usando
+\texttt{word\_count} como variável auxiliar. Os resultados mostram que a
+alocação de Neyman reduz o erro-padrão em até $20\%$ frente à alocação
+proporcional para o mesmo orçamento $n$, e que o estimador tipo razão
+combinado atinge erro absoluto de $0{,}69\%$ contra a verdade populacional. O
+\textit{pipeline} é integralmente reproduzível em Python e disponibilizado
+como \textit{open source}.
+\end{abstract}
+
+\noindent\textbf{Palavras-chave:} amostragem estratificada, alocação de Neyman,
+estimador tipo razão, estimador tipo regressão, detecção de toxicidade,
+auditoria de IA, ToLD-Br.
+
+\input{sections/01-introduction}
+\input{sections/02-theoretical-framework}
+\input{sections/03-related-work}
+\input{sections/04-methodology}
+\input{sections/05-results}
+\input{sections/06-conclusion}
+
+\bibliographystyle{abbrv}
+\bibliography{references}
+
+\end{document}

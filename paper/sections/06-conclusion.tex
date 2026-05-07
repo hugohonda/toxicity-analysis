@@ -1,0 +1,78 @@
+\section{Conclusões}
+\label{sec:conclusion}
+
+Este trabalho aplicou os instrumentos clássicos da teoria amostral
+--- fórmula de Cochran (1977), alocação ótima de Neyman e estimadores tipo
+razão e tipo regressão sob desenho estratificado --- a um \textit{corpus}
+público de toxicidade em português brasileiro (ToLD-Br), com o objetivo de
+estabelecer um \textit{pipeline} reproduzível de auditoria estatística sobre
+\textit{datasets} de detecção de dano.
+
+\paragraph{Resposta às questões orientadoras.} \textbf{(Q1)} A fórmula de
+Cochran, com correção de população finita, fornece $n=378$ como tamanho
+amostral mínimo para estimar parâmetros populacionais com erro de amostragem
+de $5\%$ a $95\%$ de confiança sobre o ToLD-Br. Este número é diretamente
+verificável e dispensa o uso de amostras por conveniência. \textbf{(Q2)} A
+alocação ótima de Neyman reduz o erro-padrão das estimativas em até $20\%$
+frente à alocação proporcional para o mesmo orçamento $n$, com magnitude
+dependente do estimador adotado. \textbf{(Q3)} Entre os cinco estimadores
+avaliados, o tipo razão combinado apresentou o menor erro absoluto contra a
+verdade populacional ($0{,}69\%$ de $\bar{Y}$); o tipo regressão separado
+apresentou o menor erro-padrão. A baixa correlação observada entre a variável
+auxiliar (\texttt{word\_count}) e a variável-alvo (\texttt{total\_severity})
+limita o ganho da regressão sobre a média estratificada simples ---
+limitação que sugere o uso de auxiliares mais informativos em trabalhos
+futuros.
+
+\paragraph{Contribuição à teoria.} Este trabalho fornece uma aplicação
+explícita de Cochran §5.5--§7.11 e Bolfarine \& Bussab §5--§7 a um
+\textit{corpus} de PNL em português brasileiro, com derivação completa das
+variâncias amostrais sob FPC e validação empírica via $74$ testes unitários
+contra propriedades textbook (recuperação exata sob censo total; redução de
+variância da regressão face à média sob $y = 2x + \epsilon$).
+
+\paragraph{Contribuição à técnica.} Disponibiliza-se um módulo Python
+\textit{open source} (\texttt{toxicity\_analysis}) que encapsula o
+\textit{pipeline} de amostragem, cálculo de \textit{features} léxicas e
+estimação estratificada, com gerenciamento de dependências via \texttt{uv} e
+amparo em $74$ testes \texttt{pytest}. O artefato é prontamente reutilizável
+em outros \textit{datasets} de detecção de toxicidade.
+
+\paragraph{Contribuição à sociedade.} A auditoria de modelos de linguagem é
+uma componente crescente da regulação e da prática responsável de IA. Ao
+fornecer instrumentos estatísticos calibrados para estimar prevalências e
+intensidades de dano sobre \textit{corpora} de referência --- com erros de
+amostragem explícitos --- o trabalho contribui para que decisões de
+moderação automática e auditoria regulatória se apoiem em base inferencial
+defensável.
+
+\paragraph{Trabalhos futuros.}
+(i) Extensão do \textit{pipeline} a outros \textit{corpora} em português
+(HateBR, OLID-BR) e a \textit{datasets} bilíngues, comparando o ganho de
+Neyman entre dispersões linguísticas distintas.
+(ii) Investigação do esquema ordinal de votos como dimensão adicional de
+estratificação --- por exemplo, por \textit{ratings} de concordância --- em
+substituição à binarização por maioria.
+(iii) Auditoria sobre saídas de LLMs (não apenas \textit{corpora} rotulados),
+aplicando o mesmo desenho estratificado a amostras de gerações de modelos
+treinados.
+(iv) Avaliação sistemática de variáveis auxiliares mais ricas
+(\textit{embeddings}, \texttt{caps\_ratio}, \texttt{punc\_density}) para
+maximizar o ganho do estimador regressão.
+
+\subsection*{Considerações Éticas}
+
+Os \textit{datasets} de toxicidade utilizados como instrumentos de auditoria
+não são neutros: refletem os critérios de rotulagem e os vieses culturais
+dos próprios anotadores. O uso de tais \textit{corpora} para validar modelos
+em escala carrega o risco de internalizar como objetivo um proxy ruidoso da
+norma social vigente em um momento e contexto específicos. Recomenda-se que
+auditorias estatísticas, ainda que metodologicamente rigorosas como a aqui
+proposta, sejam acompanhadas de discussão qualitativa sobre os critérios
+implícitos no \textit{corpus}-fonte e suas limitações de cobertura cultural.
+
+\subsection*{Disponibilidade e Reprodutibilidade}
+
+Código-fonte, \textit{notebooks}, suíte de testes e \textit{pipeline} de
+\textit{download} do ToLD-Br estão disponíveis em
+\texttt{https://github.com/[autor]/toxicity-analysis} (a ser publicado).

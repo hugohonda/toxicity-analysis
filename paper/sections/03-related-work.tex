@@ -1,0 +1,83 @@
+\section{Trabalhos Relacionados}
+\label{sec:related}
+
+\subsection{\textit{Datasets} de toxicidade em texto}
+
+A produção de \textit{datasets} rotulados para detecção de toxicidade tem sido
+dominada por iniciativas em língua inglesa.
+Wulczyn et al.~\cite{wulczyn2017} apresentaram o \textit{Wikipedia Talk
+Corpus}, base do \textit{Jigsaw Toxic Comment Classification Challenge}, com
+160 mil comentários e seis categorias binárias.
+Borkan et al.~\cite{borkan2019nuanced} estenderam o trabalho ao
+\textit{Civil Comments}, anotando atributos de identidade para auditoria de
+viés não-intencional --- 1{,}8 milhões de comentários e cobertura demográfica
+detalhada.
+Davidson et al.~\cite{davidson2017} e Founta et al.~\cite{founta2018}
+construíram \textit{datasets} sobre \textit{tweets} com foco em discurso de
+ódio explícito e abusivo, mantendo o desbalanceamento intrínseco do fenômeno.
+Mathew et al.~\cite{mathew2021} introduziram o \textit{HateXplain}, com
+$20$ mil amostras em três classes balanceadas e anotações em
+\textit{rationale} para detecção explicável.
+Pavlopoulos et al.~\cite{pavlopoulos2020} ampliaram a discussão considerando
+o papel do contexto conversacional na rotulagem.
+
+Em português brasileiro, a literatura é mais recente e mais restrita.
+Leite et al.~\cite{leite2020} publicaram o \textbf{ToLD-Br}, $21$ mil
+\textit{tweets} anotados em seis categorias com esquema de votos $0$--$3$.
+Vargas et al.~\cite{vargas2022hatebr} apresentaram o \textbf{HateBR}, com
+$7$ mil comentários do \textit{Instagram} e rotulagem hierárquica.
+Trajano et al.~\cite{trajano2024olid} disponibilizaram o
+\textbf{OLID-BR}, com aproximadamente $7$ mil exemplos e estrutura
+hierárquica espelhada no OLID original.
+
+\subsection{Auditoria de modelos de linguagem e viés}
+
+Gehman et al.~\cite{gehman2020} popularizaram o uso de \textit{prompts}
+extraídos de \textit{datasets} de toxicidade como instrumento de auditoria de
+modelos generativos (\textit{RealToxicityPrompts}).
+Bender et al.~\cite{bender2021} discutiram criticamente os riscos sistêmicos
+de modelos de linguagem em larga escala, sustentando o argumento metodológico
+de que a auditoria precisa de fundamentos estatísticos explícitos.
+Borkan et al.~\cite{borkan2019nuanced} formalizaram métricas
+\textit{subgroup-aware} (e.g., \textit{Equality of Opportunity}) para medir
+viés não-intencional --- métricas que dependem de tamanhos amostrais por
+subgrupo, mas raramente acompanhadas de derivação amostral formal.
+
+\subsection{Aplicações de teoria amostral em PNL}
+
+A teoria amostral clássica~\cite{cochran1977,bolfarine2005,lohr1999,thompson2002}
+é prática consolidada em ciências sociais, epidemiologia e pesquisa de
+mercado, mas é pouco utilizada em PNL aplicada. Os \textit{datasets} citados
+acima geralmente apresentam apenas a divisão treino/validação/teste sem
+justificar estatisticamente a representatividade dos
+\textit{splits}~\cite{leite2020,vargas2022hatebr,davidson2017}. Quando a
+amostragem é discutida, o foco é geralmente \textit{class balancing} para
+treino preditivo --- e não estimação inferencial de parâmetros populacionais.
+
+\subsection{Posicionamento deste trabalho}
+
+Os trabalhos discutidos cobrem (a) a construção de \textit{datasets} de
+toxicidade em diferentes línguas e (b) métricas de auditoria sobre modelos.
+Persiste, entretanto, a lacuna metodológica de \textit{aplicar amostragem
+probabilística estratificada} sobre tais \textit{corpora} para estimar
+parâmetros populacionais com erro-padrão controlado. O presente artigo se
+posiciona neste espaço, aplicando alocação de Neyman e estimadores tipo
+razão e regressão de forma reproduzível sobre o ToLD-Br.
+
+\begin{table}[h]
+\centering
+\small
+\caption{Comparação resumida das abordagens dos trabalhos relacionados.}
+\label{tab:related-comparison}
+\begin{tabular}{lcccc}
+\toprule
+Trabalho & Idioma & Justifica $n$? & Trata caudas raras? & Estima $\bar Y$? \\
+\midrule
+\cite{wulczyn2017}        & EN & não & não & não \\
+\cite{borkan2019nuanced}  & EN & não & sim (identidade) & não \\
+\cite{leite2020}          & PT & não & não & não \\
+\cite{vargas2022hatebr}   & PT & não & sim (hierárquico) & não \\
+\textbf{Este trabalho}    & \textbf{PT} & \textbf{Cochran} & \textbf{Neyman+censo} & \textbf{razão+regressão} \\
+\bottomrule
+\end{tabular}
+\end{table}

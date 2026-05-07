@@ -1,0 +1,125 @@
+\section{Metodologia}
+\label{sec:method}
+
+\subsection{Tipo de pesquisa}
+
+Pesquisa aplicada de natureza quantitativa, com método experimental sobre
+dados secundários (\textit{corpus} público). O delineamento é
+\textit{descritivo-comparativo}: um \textit{pipeline} de amostragem é
+aplicado, três alocações alternativas são contrastadas, e cinco estimadores
+do parâmetro populacional são comparados quanto a viés e variância.
+
+\subsection{População, universo e estratos}
+
+A população alvo é o conjunto $\mathcal{U}$ de \textit{tweets} em português
+brasileiro do ToLD-Br~\cite{leite2020}, $N = 21{,}000$ exemplos. A
+distribuição populacional sob a regra de maioria ($v \geq 2$) é apresentada
+na Tabela~\ref{tab:population}. O desbalanceamento extremo
+(\textit{racism} a $0{,}16\%$, \textit{xenophobia} a $0{,}20\%$) motiva o
+tratamento estratificado.
+
+\begin{table}[h]
+\centering
+\caption{Distribuição populacional do ToLD-Br ($N=21{,}000$, votos $\geq 2$).}
+\label{tab:population}
+\begin{tabular}{lrr}
+\toprule
+Categoria      & Positivos & \% da população \\
+\midrule
+\textit{obscene}    & 2{,}403 & 11{,}44\% \\
+\textit{insult}     & 1{,}869 &  8{,}90\% \\
+\textit{homophobia} &   176   &  0{,}84\% \\
+\textit{misogyny}   &   133   &  0{,}63\% \\
+\textit{xenophobia} &    42   &  0{,}20\% \\
+\textit{racism}     &    33   &  0{,}16\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Definição dos estratos.} Como o esquema é multi-rótulo, adota-se a
+regra \textit{raro-vence}: cada \textit{tweet} é alocado ao estrato
+correspondente ao rótulo majoritário positivo mais raro entre os seis ---
+ou ao estrato \textit{clean} se nenhum rótulo for majoritariamente positivo.
+A ordem de prioridade do mais raro ao mais comum é
+$\text{racism} \to \text{xenophobia} \to \text{misogyny} \to \text{homophobia}
+\to \text{insult} \to \text{obscene}$. Esta partição é mutuamente exclusiva e
+preserva integralmente a contagem populacional dos estratos raros.
+
+\subsection{Variável-alvo e variável auxiliar}
+
+\paragraph{Variável-alvo.} Define-se
+$y_i = \sum_{j=1}^{6} v_{ij}$ ($\texttt{total\_severity}$), inteiro em
+$[0, 18]$, interpretável como \textit{intensidade total de preocupação dos
+anotadores} sobre o \textit{tweet}. A média populacional verdadeira é
+$\bar{Y} = 0{,}8591$.
+
+\paragraph{Variável auxiliar.} Adota-se $x = \texttt{word\_count}$ (contagem
+de palavras), barata de calcular sobre a população completa e correlacionada
+com a intensidade de toxicidade. A correlação de Pearson observada é
+$\rho_{xy} \approx 0{,}11$ na população --- modesta, mas suficiente para
+ilustrar o ganho dos estimadores razão e regressão.
+
+\subsection{Cálculo do tamanho amostral}
+
+Aplicando as equações~(\ref{eq:n0}) e~(\ref{eq:n}) com $z=1{,}96$, $p=0{,}5$,
+$e=0{,}05$:
+\begin{equation*}
+  n_0 \approx 384{,}16; \qquad n = \frac{384{,}16}{1 + 383{,}16/21000}
+            \approx 377{,}3 \;\Rightarrow\; n = 378.
+\end{equation*}
+
+\subsection{Estratégias de alocação comparadas}
+\label{sec:method:allocation}
+
+Três alocações de $n=378$ entre os estratos são comparadas:
+
+\begin{description}
+  \item[Proporcional (Bolfarine \& Bussab):] $n_h = n \cdot N_h/N$. Resulta
+        em $n_h = 1$ para os estratos \textit{racism} e \textit{xenophobia}.
+  \item[Cochran-por-estrato com censo (Cochran §5.5):] Aplicação independente
+        da equação~(\ref{eq:n}) a cada $N_h$, com censo se $n_h \geq N_h$.
+        Total $\approx 1{,}316$ exemplos --- útil como referência alternativa
+        que recupera todos os estratos raros.
+  \item[\textbf{Ótima de Neyman} (Cochran §5.5; Bolfarine \& Bussab §5.5):]
+        equação~(\ref{eq:neyman}). Esta é a alocação adotada como referência
+        principal para a estimação de $\bar{Y}$.
+\end{description}
+
+Em qualquer das alocações, a amostragem dentro de cada estrato é
+\textit{aleatória simples sem reposição} (SRS-WOR).
+
+\subsection{Estimação do parâmetro populacional}
+
+A partir da amostra Neyman, $\bar{Y}$ é estimado pelos cinco métodos descritos
+na Seção~\ref{sec:theory:estimators}:
+\begin{enumerate}
+  \item Média estratificada simples (eq.~\ref{eq:strat-mean}).
+  \item Estimador tipo razão separado (eq.~\ref{eq:ratio-sep}).
+  \item Estimador tipo razão combinado (eq.~\ref{eq:ratio-comb}).
+  \item Estimador tipo regressão separado (eq.~\ref{eq:reg-sep}).
+  \item Estimador tipo regressão combinado (eq.~\ref{eq:reg-comb}).
+\end{enumerate}
+Cada estimativa é acompanhada de erro-padrão e intervalo de confiança de
+$95\%$ (Wald, normal padrão).
+
+\subsection{Instrumentos e procedimento}
+
+O \textit{pipeline} é integralmente implementado em Python 3.12, gerenciado
+via \texttt{uv}, com as bibliotecas \texttt{pandas}, \texttt{numpy},
+\texttt{scipy}, \texttt{scikit-learn}, \texttt{matplotlib} e
+\texttt{datasets}. O código-fonte está organizado em três módulos:
+\begin{itemize}
+  \item \texttt{toxicity\_analysis.sampling}: fórmula de Cochran e três
+        alocações (proporcional, Cochran-por-estrato, Neyman) com SRS-WOR
+        dentro de cada estrato.
+  \item \texttt{toxicity\_analysis.features}: \textit{features} léxicas
+        determinísticas e diagnóstico de ruído por contagem de votos.
+  \item \texttt{toxicity\_analysis.estimators}: estimadores tipo razão e
+        regressão, separado e combinado, com variâncias de grande amostra
+        sob FPC.
+\end{itemize}
+A reprodutibilidade é garantida por uma suíte de $74$ testes unitários
+(\texttt{pytest}) que cobre identidades textbook (e.g., $n_0 \approx 384$ a
+$95\%$ IC; estimadores recuperam $\bar{Y}$ exatamente sob censo total) e
+inputs adversariais. Todos os experimentos usam semente
+\texttt{random\_state=42}.
