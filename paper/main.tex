@@ -1,60 +1,79 @@
 % =====================================================================
-%  Auditoria de Alinhamento de IA via Amostragem Probabilística
-%  Compiles as-is with stock LaTeX (article class).
-%  TODO: swap to SBC's class once sbc-template.cls is dropped into ./
-%        \documentclass[12pt]{sbc-template}
-%        and remove this preamble's geometry/abstract overrides.
+%  Auditoria de Datasets de Toxicidade via Amostragem Estratificada
+%  Conferência alvo: BRACIS 2025 (Brazilian Conference on Intelligent
+%  Systems) — Qualis CAPES A4. Template IEEEtran (publicação IEEE CS).
 % =====================================================================
-\documentclass[11pt,a4paper]{article}
+\documentclass[conference,a4paper]{IEEEtran}
+\IEEEoverridecommandlockouts
 
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[brazil]{babel}
-\usepackage[margin=2.5cm]{geometry}
-\usepackage{amsmath, amssymb}
+\usepackage{amsmath, amssymb, amsfonts}
 \usepackage{booktabs}
 \usepackage{graphicx}
-\usepackage{hyperref}
+\usepackage{textcomp}
+\usepackage{xcolor}
 \usepackage{cite}
 \usepackage{url}
-\usepackage{microtype}
+\usepackage{hyperref}
 
 \graphicspath{{figures/}{../data/processed/figures/}}
 
-\title{Amostragem Estratificada com Alocação de Neyman e Estimadores tipo Razão e Regressão para Auditoria de Datasets de Toxicidade:\\ um Estudo de Caso sobre o ToLD-Br}
-
-\author{%
-  Hugo Honda Ferreira\\ \texttt{honda.data.science@gmail.com} \and
-  Maria Fernanda \\ \texttt{[email]}%
+\title{%
+Amostragem Estratificada com Alocação de Neyman e Estimadores tipo Razão e
+Regressão para Auditoria de Datasets de Toxicidade:\\
+um Estudo de Caso sobre o ToLD-Br%
+\thanks{Trabalho destinado à submissão na BRACIS 2025 (Brazilian Conference
+on Intelligent Systems, SBC, Qualis CAPES A4).}%
 }
 
-\date{\today}
+\author{%
+\IEEEauthorblockN{Hugo Honda Ferreira}
+\IEEEauthorblockA{
+\textit{Programa de P\'os-Gradua\c c\~ao em Inform\'atica}\\
+\textit{Universidade de Bras\'ilia}\\
+Bras\'ilia, Brasil\\
+honda.data.science@gmail.com}
+\and
+\IEEEauthorblockN{Maria Fernanda}
+\IEEEauthorblockA{
+\textit{Programa de P\'os-Gradua\c c\~ao em Inform\'atica}\\
+\textit{Universidade de Bras\'ilia}\\
+Bras\'ilia, Brasil\\
+[email]}
+}
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
-Este artigo investiga em que medida a auditoria estatística de \textit{datasets}
-de toxicidade pode ser conduzida com rigor amostral a partir de
-\textit{subcorpus} representativos. Aplica-se amostragem estratificada sem
-reposição sobre o ToLD-Br~\cite{leite2020} ($N=21{,}000$ tweets em português
-brasileiro, seis categorias de dano), com tamanho amostral
-$n=378$ derivado da fórmula de Cochran~\cite{cochran1977} e \textbf{alocação
-ótima de Neyman}~\cite{cochran1977,bolfarine2005}. O parâmetro populacional
-$\bar{Y}$ (severidade total agregada) é estimado por cinco métodos sob desenho
-estratificado --- média estratificada, estimador tipo razão (separado e
-combinado) e estimador tipo regressão (separado e combinado) --- usando
-\texttt{word\_count} como variável auxiliar. Os resultados mostram que a
-alocação de Neyman reduz o erro-padrão em até $20\%$ frente à alocação
-proporcional para o mesmo orçamento $n$, e que o estimador tipo razão
-combinado atinge erro absoluto de $0{,}69\%$ contra a verdade populacional. O
-\textit{pipeline} é integralmente reproduzível em Python e disponibilizado
-como \textit{open source}.
+A auditoria estat\'istica de \textit{datasets} de toxicidade exige
+amostragem com rigor inferencial, mas a literatura emp\'irica em
+processamento de l\'ingua natural raramente justifica o tamanho dos
+\textit{subcorpus} analisados. Este artigo aplica amostragem estratificada
+sem reposi\c c\~ao sobre o ToLD-Br ($N=21{,}000$ \textit{tweets} em portugu\^es
+brasileiro, seis categorias de dano), com tamanho amostral $n=378$ derivado
+da f\'ormula de Cochran e \textbf{aloca\c c\~ao \'otima de Neyman}. O
+par\^ametro populacional $\bar{Y}$ (severidade total agregada) \'e estimado por
+cinco m\'etodos sob desenho estratificado --- m\'edia estratificada, estimador
+tipo raz\~ao (separado e combinado) e estimador tipo regress\~ao (separado e
+combinado) --- usando \texttt{word\_count} como vari\'avel auxiliar. A
+contribui\c c\~ao principal \'e demonstrar empiricamente, via replica\c c\~ao
+Monte Carlo ($B=500$) e teste de Wilcoxon pareado, que (i) Neyman reduz o
+erro-padr\~ao em at\'e $20\%$ frente \`a aloca\c c\~ao proporcional cl\'assica
+($p<10^{-50}$), (ii) o estimador raz\~ao combinado atinge erro absoluto de
+$0{,}69\%$ contra a verdade populacional, e (iii) o ganho da regress\~ao sobre
+a m\'edia estratificada \'e marginal sob o auxiliar adotado, indicando que a
+escolha de $x$ \'e cr\'itica. O \textit{pipeline} \'e integralmente reproduz\'ivel
+em Python e disponibilizado como \textit{open source}.
 \end{abstract}
 
-\noindent\textbf{Palavras-chave:} amostragem estratificada, alocação de Neyman,
-estimador tipo razão, estimador tipo regressão, detecção de toxicidade,
-auditoria de IA, ToLD-Br.
+\begin{IEEEkeywords}
+amostragem estratificada, aloca\c c\~ao de Neyman, estimador tipo raz\~ao,
+estimador tipo regress\~ao, detec\c c\~ao de toxicidade, auditoria de IA,
+ToLD-Br
+\end{IEEEkeywords}
 
 \input{sections/01-introduction}
 \input{sections/02-theoretical-framework}
@@ -63,7 +82,7 @@ auditoria de IA, ToLD-Br.
 \input{sections/05-results}
 \input{sections/06-conclusion}
 
-\bibliographystyle{abbrv}
+\bibliographystyle{IEEEtran}
 \bibliography{references}
 
 \end{document}

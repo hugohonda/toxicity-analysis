@@ -3,62 +3,136 @@
 
 \subsection{\textit{Datasets} de toxicidade em texto}
 
-A produção de \textit{datasets} rotulados para detecção de toxicidade tem sido
-dominada por iniciativas em língua inglesa.
-Wulczyn et al.~\cite{wulczyn2017} apresentaram o \textit{Wikipedia Talk
-Corpus}, base do \textit{Jigsaw Toxic Comment Classification Challenge}, com
-160 mil comentários e seis categorias binárias.
-Borkan et al.~\cite{borkan2019nuanced} estenderam o trabalho ao
-\textit{Civil Comments}, anotando atributos de identidade para auditoria de
-viés não-intencional --- 1{,}8 milhões de comentários e cobertura demográfica
-detalhada.
-Davidson et al.~\cite{davidson2017} e Founta et al.~\cite{founta2018}
-construíram \textit{datasets} sobre \textit{tweets} com foco em discurso de
-ódio explícito e abusivo, mantendo o desbalanceamento intrínseco do fenômeno.
-Mathew et al.~\cite{mathew2021} introduziram o \textit{HateXplain}, com
-$20$ mil amostras em três classes balanceadas e anotações em
-\textit{rationale} para detecção explicável.
-Pavlopoulos et al.~\cite{pavlopoulos2020} ampliaram a discussão considerando
-o papel do contexto conversacional na rotulagem.
+A produção de \textit{datasets} rotulados para detecção de toxicidade tem
+sido dominada por iniciativas em língua inglesa.
 
-Em português brasileiro, a literatura é mais recente e mais restrita.
-Leite et al.~\cite{leite2020} publicaram o \textbf{ToLD-Br}, $21$ mil
-\textit{tweets} anotados em seis categorias com esquema de votos $0$--$3$.
-Vargas et al.~\cite{vargas2022hatebr} apresentaram o \textbf{HateBR}, com
-$7$ mil comentários do \textit{Instagram} e rotulagem hierárquica.
-Trajano et al.~\cite{trajano2024olid} disponibilizaram o
-\textbf{OLID-BR}, com aproximadamente $7$ mil exemplos e estrutura
-hierárquica espelhada no OLID original.
+\paragraph{Wikipedia Talk Corpus / Jigsaw.}
+Wulczyn~et~al.~\cite{wulczyn2017} apresentaram o \textit{Wikipedia Talk
+Corpus}, base posteriormente expandida para o
+\textit{Jigsaw}~\cite{borkan2019nuanced} com 160 mil comentários e seis
+categorias binárias.
+\textbf{Pontos fortes:} grande escala, anotação multi-rótulo, ampla adoção
+(\textit{benchmark} \textit{de facto} para classificação de toxicidade em
+inglês). \textbf{Pontos fracos:} (i)~rótulos binários descartam a
+incerteza inter-anotadores; (ii)~não há justificativa amostral dos
+\textit{splits} treino/teste; (iii)~viés de auditoria por
+\textit{Wikipedians} não representa uso público de mídias sociais.
+\textbf{Razão de não-adoção:} idioma inglês incompatível com o objetivo
+deste trabalho.
+
+\paragraph{Civil Comments com atributos de identidade.}
+Borkan~et~al.~\cite{borkan2019nuanced} estenderam o Jigsaw com 1{,}8
+milhões de comentários e atributos de identidade (gênero, raça, religião,
+orientação sexual). \textbf{Pontos fortes:} cobertura demográfica fina e
+métricas \textit{subgroup-aware}. \textbf{Pontos fracos:} sub-rotulagem
+extrema dos atributos de identidade --- a maior parte dos comentários não
+recebe nenhum atributo, comprometendo a estimação de viés por
+\textit{subgroup}. \textbf{Razão de não-adoção:} idioma e ausência de cauda
+estratificada explicitamente comparável.
+
+\paragraph{Datasets de \textit{tweets}.}
+Davidson~et~al.~\cite{davidson2017} e Founta~et~al.~\cite{founta2018}
+construíram \textit{datasets} sobre \textit{Twitter} com foco em discurso de
+ódio explícito e abusivo. \textbf{Pontos fortes:} taxonomias detalhadas e
+volume relevante. \textbf{Pontos fracos:} (i)~classes definidas operacionalmente
+(\textit{hate} vs \textit{offensive} vs \textit{neither}) com baixa
+confiabilidade inter-anotadores; (ii)~discutida fragilidade contra
+\textit{tweets} \textit{adversariais}~\cite{davidson2017}.
+\textbf{Razão de não-adoção:} idioma inglês.
+
+\paragraph{HateXplain.}
+Mathew~et~al.~\cite{mathew2021} introduziram um \textit{dataset} de 20 mil
+amostras com \textit{rationales} explicáveis para o rótulo. \textbf{Pontos
+fortes:} balanceamento artificial de classes (cada classe $\approx 33\%$),
+o que viabiliza alocação proporcional sem caudas raras. \textbf{Pontos fracos:}
+o balanceamento construído \textit{a priori} elimina o fenômeno de
+desbalanceamento extremo --- precisamente o que motiva a alocação ótima
+em corpora reais. \textbf{Razão de não-adoção:} sua estrutura balanceada o
+torna inadequado como caso de teste para Neyman; resolveria nosso problema
+por construção.
+
+\paragraph{Contexto conversacional.}
+Pavlopoulos~et~al.~\cite{pavlopoulos2020} mostraram que adicionar contexto
+conversacional altera os rótulos em uma fração não desprezível dos casos.
+\textbf{Implicação:} qualquer auditoria amostral precisa fixar o protocolo
+de rotulagem (com ou sem contexto), o que reforça a importância de
+documentar o esquema do \textit{corpus}-fonte.
+
+\paragraph{Datasets em português brasileiro.}
+Leite~et~al.~\cite{leite2020,leite2020_thesis} publicaram o \textbf{ToLD-Br}
+(seis categorias, votos $0$--$3$). \textbf{Pontos fortes:} esquema ordinal de
+votos preserva incerteza; volume relativamente grande ($N=21$ mil) para um
+\textit{corpus} em português; cobre o espectro \textit{LGBTfobia–racismo–
+misoginia–xenofobia}. \textbf{Pontos fracos:} sem justificativa amostral no
+artigo original; estratificação multi-rótulo não-trivial.
+\textbf{Razão de adoção:} fit ideal para o presente estudo (idioma, escala,
+multi-rótulo, caudas raras explícitas).
+
+Vargas~et~al.~\cite{vargas2022hatebr,vargas2022_thesis} apresentaram o
+\textbf{HateBR}, com 7 mil comentários do \textit{Instagram} e rotulagem
+hierárquica binária (ofensivo vs não, com sub-categorias).
+\textbf{Pontos fortes:} qualidade de anotação por especialistas;
+contextualização cultural brasileira distinta. \textbf{Pontos fracos:}
+$N$ pequeno limita estratos raros (xenofobia, capacitismo); rotulagem
+hierárquica não permite comparação direta com ToLD-Br.
+\textbf{Razão de não-adoção como fonte primária:} escala insuficiente para
+ilustrar Neyman vs proporcional --- avaliado como \textit{corpus} de
+extensão futura.
+
+Trajano~et~al.~\cite{trajano2024olid} disponibilizaram o
+\textbf{OLID-BR} ($\approx 7$ mil exemplos) com taxonomia OLID adaptada.
+\textbf{Pontos fortes:} alinhamento com a tradição internacional OLID,
+facilitando comparação \textit{cross-lingual}. \textbf{Pontos fracos:}
+escala similar à do HateBR; sem esquema ordinal de votos.
+\textbf{Razão de não-adoção:} mesmas considerações do HateBR.
 
 \subsection{Auditoria de modelos de linguagem e viés}
 
-Gehman et al.~\cite{gehman2020} popularizaram o uso de \textit{prompts}
-extraídos de \textit{datasets} de toxicidade como instrumento de auditoria de
-modelos generativos (\textit{RealToxicityPrompts}).
-Bender et al.~\cite{bender2021} discutiram criticamente os riscos sistêmicos
-de modelos de linguagem em larga escala, sustentando o argumento metodológico
-de que a auditoria precisa de fundamentos estatísticos explícitos.
-Borkan et al.~\cite{borkan2019nuanced} formalizaram métricas
-\textit{subgroup-aware} (e.g., \textit{Equality of Opportunity}) para medir
-viés não-intencional --- métricas que dependem de tamanhos amostrais por
-subgrupo, mas raramente acompanhadas de derivação amostral formal.
+\paragraph{RealToxicityPrompts.}
+Gehman~et~al.~\cite{gehman2020} popularizaram o uso de \textit{prompts}
+extraídos de \textit{datasets} de toxicidade como instrumento de auditoria
+de modelos generativos. \textbf{Pontos fortes:} protocolo reproduzível e
+amplamente adotado pela comunidade. \textbf{Pontos fracos:} a amostragem dos
+\textit{prompts} é por escore (\textit{toxic} vs \textit{non-toxic}) sem
+justificativa amostral formal --- a quantidade de \textit{prompts} é
+arbitrária. \textbf{Posicionamento:} este artigo cobre exatamente esta
+lacuna inferencial, embora aplicada a auditoria de \textit{datasets} e não
+ao protocolo de \textit{prompting}.
+
+\paragraph{Métricas \textit{subgroup-aware}.}
+Borkan~et~al.~\cite{borkan2019nuanced} formalizaram métricas como
+\textit{Equality of Opportunity} e \textit{Demographic Parity} para medir
+viés não-intencional. \textbf{Ponto crítico:} todas dependem de tamanhos
+amostrais por subgrupo, mas raramente acompanhadas de derivação amostral
+formal --- de novo, lacuna que este trabalho preenche.
+
+\paragraph{Crítica metodológica em escala.}
+Bender~et~al.~\cite{bender2021} sustentam que a auditoria de modelos de
+linguagem em larga escala precisa de fundamentos estatísticos explícitos,
+para além de \textit{benchmarks} pontuais. \textbf{Posicionamento:} este
+artigo é uma resposta concreta a esse chamado.
 
 \subsection{Aplicações de teoria amostral em PNL}
 
-A teoria amostral clássica~\cite{cochran1977,bolfarine2005,lohr1999,thompson2002}
+A teoria amostral
+clássica~\cite{cochran1977,bolfarine2005,lohr1999,thompson2002,cordeiro2010}
 é prática consolidada em ciências sociais, epidemiologia e pesquisa de
 mercado, mas é pouco utilizada em PNL aplicada. Os \textit{datasets} citados
 acima geralmente apresentam apenas a divisão treino/validação/teste sem
 justificar estatisticamente a representatividade dos
-\textit{splits}~\cite{leite2020,vargas2022hatebr,davidson2017}. Quando a
-amostragem é discutida, o foco é geralmente \textit{class balancing} para
-treino preditivo --- e não estimação inferencial de parâmetros populacionais.
+\textit{splits}~\cite{leite2020,vargas2022hatebr,davidson2017}.
+Quando a amostragem é discutida, o foco é geralmente \textit{class balancing}
+para treino preditivo --- e não estimação inferencial de parâmetros
+populacionais. \textbf{Lacuna identificada:} ausência de aplicação explícita
+de alocação ótima e estimadores tipo razão e regressão a \textit{corpora} de
+auditoria de toxicidade.
 
 \subsection{Posicionamento deste trabalho}
 
-Os trabalhos discutidos cobrem (a) a construção de \textit{datasets} de
-toxicidade em diferentes línguas e (b) métricas de auditoria sobre modelos.
-Persiste, entretanto, a lacuna metodológica de \textit{aplicar amostragem
+A Tabela~\ref{tab:related-comparison} sumariza a comparação. Os trabalhos
+discutidos cobrem (a) a construção de \textit{datasets} de toxicidade em
+diferentes línguas e (b) métricas de auditoria sobre modelos. Persiste,
+entretanto, a lacuna metodológica de \textit{aplicar amostragem
 probabilística estratificada} sobre tais \textit{corpora} para estimar
 parâmetros populacionais com erro-padrão controlado. O presente artigo se
 posiciona neste espaço, aplicando alocação de Neyman e estimadores tipo

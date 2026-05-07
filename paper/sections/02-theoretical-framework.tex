@@ -44,10 +44,31 @@ desvio-padrão de $y$ no estrato $h$~\cite{cochran1977}:
 \end{equation}
 Bolfarine \& Bussab~\cite{bolfarine2005} chamam atenção para o caso especial
 em que $\sigma_h$ é constante em $h$: a equação~(\ref{eq:neyman}) reduz-se à
-alocação \textit{proporcional} $n_h = n \cdot W_h$. Quando os $\sigma_h$
-diferem materialmente entre estratos, Neyman pode reduzir substancialmente o
-erro-padrão para o mesmo $n$ --- esta é a hipótese empiricamente avaliada na
-Seção~\ref{sec:results}.
+alocação \textit{proporcional} $n_h = n \cdot W_h$.
+
+\paragraph{Variância e ganho de Neyman.} A variância do estimador
+estratificado da média sob alocação ótima é
+(Cochran~\cite{cochran1977}~§5A.7; Lohr~\cite{lohr1999}~§4.5):
+\begin{equation}
+  \mathrm{Var}_{\mathrm{Ney}}(\hat{\bar{Y}}_{st})
+  \;=\; \frac{1}{n}\Bigl(\sum_{h} W_h \sigma_h\Bigr)^{2}
+        - \frac{1}{N}\sum_{h} W_h \sigma_h^{2}.
+  \label{eq:var-neyman}
+\end{equation}
+Sob alocação proporcional, a variância correspondente é
+$\mathrm{Var}_{\mathrm{prop}} = \frac{1}{n}\sum_h W_h \sigma_h^{2}
+- \frac{1}{N}\sum_h W_h \sigma_h^{2}$. A diferença, isto é, o ganho que
+Neyman oferece sobre a alocação proporcional, é:
+\begin{equation}
+  \mathrm{Var}_{\mathrm{prop}} - \mathrm{Var}_{\mathrm{Ney}}
+  \;=\; \frac{1}{n}\sum_{h} W_h \bigl(\sigma_h - \bar{\sigma}\bigr)^{2},
+  \qquad \bar{\sigma} = \sum_h W_h \sigma_h.
+  \label{eq:gain-neyman}
+\end{equation}
+A equação~(\ref{eq:gain-neyman}) é o teorema central justificando a alocação
+ótima: o ganho é não-negativo, é zero apenas quando os $\sigma_h$ são todos
+iguais, e cresce com a heterogeneidade dos desvios-padrão entre estratos. Esta
+é a hipótese empiricamente avaliada na Seção~\ref{sec:results}.
 
 \subsection{Estimadores estratificados de $\bar{Y}$}
 \label{sec:theory:estimators}
@@ -124,13 +145,30 @@ não-nula~\cite{cochran1977,thompson2002}.
 \subsection{Detecção de toxicidade no ToLD-Br}
 \label{sec:theory:toldbr}
 
-O ToLD-Br~\cite{leite2020} consiste em $21{,}000$ \textit{tweets} em
-português brasileiro, anotados por três avaliadores em seis categorias de
-dano: \textit{homophobia}, \textit{obscene}, \textit{insult}, \textit{racism},
-\textit{misogyny}, \textit{xenophobia}. Cada anotação é um inteiro
-$v_{ij} \in \{0,1,2,3\}$ representando o número de avaliadores que sinalizou a
-categoria $j$ para o \textit{tweet} $i$. A binarização operacional consagrada
-na literatura é $\mathbb{1}[v_{ij} \geq 2]$ (regra de maioria), mas o esquema
-ordinal preserva informação sobre o grau de concordância, útil tanto para
-estratificação quanto para diagnóstico de ruído de
-rotulagem~\cite{leite2020}.
+O ToLD-Br~\cite{leite2020,leite2020_thesis} consiste em $21{,}000$
+\textit{tweets} em português brasileiro, anotados por três avaliadores em
+seis categorias de dano: \textit{homophobia}, \textit{obscene},
+\textit{insult}, \textit{racism}, \textit{misogyny}, \textit{xenophobia}.
+A construção e o protocolo de anotação são descritos em detalhe na
+dissertação de Leite~\cite{leite2020_thesis}; trabalhos correlatos sobre
+detecção automática de discurso de ódio em português incluem a tese de
+Vargas~\cite{vargas2022_thesis}. Cada anotação é um inteiro
+$v_{ij} \in \{0,1,2,3\}$ representando o número de avaliadores que sinalizou
+a categoria $j$ para o \textit{tweet} $i$. A binarização operacional
+consagrada na literatura é $\mathbb{1}[v_{ij} \geq 2]$ (regra de maioria), mas
+o esquema ordinal preserva informação sobre o grau de concordância, útil
+tanto para estratificação quanto para diagnóstico de ruído de
+rotulagem~\cite{leite2020,leite2020_thesis}.
+
+\subsection{Aplicações brasileiras de teoria amostral}
+\label{sec:theory:brasil}
+
+A literatura brasileira de amostragem e estatística aplicada
+oferece referências relevantes para o desenho proposto neste artigo.
+Bolfarine~\&~Bussab~\cite{bolfarine2005}, em particular, sistematizam os
+estimadores estratificados, razão e regressão na tradição da Escola de
+Estatística da USP. Trabalhos posteriores no Brazilian Journal of Probability
+and Statistics --- por exemplo, Cordeiro~et~al.~\cite{cordeiro2010} sobre
+ajustes por pós-estratificação em pesquisas amostrais com pesos --- ilustram
+extensões metodológicas pertinentes a auditorias de \textit{corpora}
+desbalanceados como o ToLD-Br.

@@ -12,30 +12,53 @@ direção aos estratos com maior variabilidade interna, em particular
 
 \begin{table}[h]
 \centering
-\caption{Alocação de $n=378$ entre estratos sob três regimes (ToLD-Br).}
+\small
+\caption{Alocação de $n=378$ entre estratos sob três regimes (ToLD-Br).
+Os desvios-padrão $\sigma_h$ referem-se à variável-alvo
+$y=\mathtt{total\_severity}$.}
 \label{tab:allocations}
-\begin{tabular}{lrrrr}
+\begin{tabular}{lrrrrr}
 \toprule
-Estrato       & $N_h$ & $\sigma_h$ & $n_h$ Proporc. & $n_h$ Neyman \\
+Estrato       & $N_h$ & $\sigma_h$ & $n_h$ Prop. & $n_h$ Neyman & $n_h$ Fix~B \\
 \midrule
-\textit{racism}     &     33 & --   &   1 &  $\approx 1$ \\
-\textit{xenophobia} &     42 & --   &   1 &  $\approx 1$ \\
-\textit{misogyny}   &    129 & --   &   2 &  $\approx 2$ \\
-\textit{homophobia} &    172 & --   &   3 &  $\approx 3$ \\
-\textit{insult}     & 1{,}755 & --  &  32 & $\approx 39$ \\
-\textit{obscene}    & 1{,}932 & --  &  35 & $\approx 43$ \\
-clean              & 16{,}937 & --  & 304 & $\approx 289$ \\
+\textit{racism}     &     33 & $1{,}96$ &   1 &   2 &   31 \\
+\textit{xenophobia} &     42 & $2{,}43$ &   1 &   3 &   38 \\
+\textit{misogyny}   &    129 & $1{,}53$ &   2 &   5 &   97 \\
+\textit{homophobia} &    172 & $1{,}57$ &   3 &   7 &  120 \\
+\textit{insult}     & 1{,}755 & $1{,}13$ &  31 &  55 &  316 \\
+\textit{obscene}    & 1{,}932 & $0{,}69$ &  35 &  37 &  321 \\
+clean              & 16{,}937 & $0{,}57$ & 305 & 269 &  376 \\
 \midrule
-\textbf{Total}     &        & --   & \textbf{378} & \textbf{378} \\
+\textbf{Total}     &       &        & \textbf{378} & \textbf{378} & \textbf{1{,}299} \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\subsection{Estimativas de $\bar{Y}$ sob alocação de Neyman}
+A heterogeneidade observada de $\sigma_h$ --- de $0{,}57$ no estrato
+\textit{clean} a $2{,}43$ em \textit{xenophobia} --- justifica empiricamente
+o uso da alocação ótima de Neyman: pela equação~(\ref{eq:gain-neyman}), o
+ganho de variância sobre a proporcional é estritamente positivo sempre que
+os $\sigma_h$ diferem materialmente.
 
-A Tabela~\ref{tab:estimators} apresenta os cinco estimadores aplicados à
-amostra Neyman, com intervalos de confiança de $95\%$ e erro absoluto contra
-a verdade populacional $\bar{Y}=0{,}8591$.
+A coluna \textbf{Fix~B} reporta a alocação Cochran-por-estrato com censo dos
+estratos pequenos (Cochran~\cite{cochran1977}~§5.5), apresentada em
+\S\ref{sec:method:allocation} como referência alternativa: ela atinge precisão
+de $5\%$ \textit{em cada estrato} ao custo de $1{,}299$ exemplos
+($3{,}4\times$ o orçamento de Neyman). Por destinar-se a um regime de
+auditoria diferente (precisão por estrato em vez de mínima variância da média
+populacional), Fix~B não é diretamente comparável aos estimadores de
+$\bar{Y}$ avaliados nas Seções~\ref{sec:results:single}--\ref{sec:results:mc}
+e é, portanto, mantida apenas como referência conceitual.
+
+\subsection{Estimativas de $\bar{Y}$ sob alocação de Neyman --- realização única}
+\label{sec:results:single}
+
+A Tabela~\ref{tab:estimators} apresenta os cinco estimadores aplicados a
+\emph{uma} amostra Neyman (semente \texttt{random\_state=42}), com intervalos
+de confiança de $95\%$ e erro absoluto contra a verdade populacional
+$\bar{Y}=0{,}8591$. Os números desta tabela são ilustrativos --- a
+realização-única exibe variabilidade amostral; a evidência consolidada vem da
+replicação Monte Carlo da \S\ref{sec:results:mc}.
 
 \begin{table}[h]
 \centering
@@ -56,11 +79,14 @@ Regressão combinada           & $0{,}8672$ & $0{,}0345$ & $[0{,}80,\,0{,}93]$ &
 \end{tabular}
 \end{table}
 
-\textbf{Observações.} Todos os cinco intervalos contêm a verdade populacional
-$\bar{Y}=0{,}8591$, atestando a calibração dos estimadores. O \textit{razão
-combinado} apresenta o menor erro absoluto ($0{,}0059$, ou $0{,}69\%$ de
-$\bar{Y}$); a \textit{regressão separada} apresenta o menor erro-padrão
-($0{,}0342$).
+\textbf{Observações da realização única.} Todos os cinco intervalos contêm a
+verdade populacional $\bar{Y}=0{,}8591$, atestando a calibração dos
+estimadores. Nesta realização específica, o \textit{razão combinado} apresenta
+o menor erro absoluto ($0{,}0059$); este resultado, contudo, deve ser
+interpretado com cautela --- a \S\ref{sec:results:mc} demonstra que sob
+$B=500$ replicações o estimador de menor EQM esperado é a média
+estratificada (empatada com a regressão combinada), e não o razão combinado
+isoladamente.
 
 \subsection{Comparação Neyman vs proporcional}
 
@@ -149,6 +175,42 @@ separada. (iv) Sob Neyman, a média estratificada e a regressão combinada
 empatam pelo menor EQM ($0{,}00115$); a razão combinada apresenta a melhor
 cobertura ($95{,}6\%$).
 
+\subsubsection*{Significância estatística da redução de erro-padrão}
+
+Para testar formalmente $H_0: \mathrm{EP}_{\mathrm{prop}} = \mathrm{EP}_{\mathrm{Ney}}$
+contra $H_1: \mathrm{EP}_{\mathrm{prop}} > \mathrm{EP}_{\mathrm{Ney}}$,
+aplicamos o teste de Wilcoxon de postos com sinal pareado sobre os $B=500$
+pares de erros-padrão observados em cada estimador
+(Tabela~\ref{tab:wilcoxon}). A escolha do teste não-paramétrico evita supor
+normalidade da distribuição amostral dos erros-padrão.
+
+\begin{table}[h]
+\centering
+\small
+\caption{Teste de Wilcoxon pareado ($H_1$: EP proporcional $>$ EP Neyman),
+$B=500$ replicações.}
+\label{tab:wilcoxon}
+\begin{tabular}{lrrr}
+\toprule
+Estimador & EP prop. (mediana) & EP Ney. (mediana) & valor-$p$ \\
+\midrule
+média estr.       & $0{,}0342$ & $0{,}0331$ & $\mathbf{1{,}2 \times 10^{-51}}$ \\
+razão sep.        & $0{,}0589$ & $0{,}0524$ & $\mathbf{2{,}4 \times 10^{-83}}$ \\
+razão comb.       & $0{,}0469$ & $0{,}0468$ & $0{,}176$ (n.s.) \\
+regressão sep.    & $0{,}0330$ & $0{,}0327$ & $\mathbf{7{,}5 \times 10^{-12}}$ \\
+regressão comb.   & $0{,}0342$ & $0{,}0330$ & $\mathbf{3{,}4 \times 10^{-51}}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Os resultados confirmam que a vantagem de Neyman é estatisticamente
+significativa para quatro dos cinco estimadores ($p < 10^{-11}$). A única
+exceção é o estimador razão combinado ($p=0{,}18$), em que o esquema de
+agregação pré-razão amortece a sensibilidade ao desenho amostral, conforme
+discutido em \S\ref{sec:theory:estimators}. Esta heterogeneidade tem
+implicação prática: a alocação ótima é especialmente recomendada quando se
+adota razão separada ou regressão combinada.
+
 \subsection{Diagnóstico de ruído de rotulagem}
 
 A Tabela~\ref{tab:noise} apresenta a contagem de \textit{tweets} em cada nível
@@ -191,14 +253,21 @@ estratos: $20\%$ na razão separada, $8\%$ na média estratificada e na
 regressão. Esta heterogeneidade reforça a recomendação prática de privilegiar
 estimadores combinados quando a alocação não puder ser otimamente derivada.
 
-\paragraph{Q3 — razão vs regressão.} O estimador tipo razão combinado
-apresentou o menor erro absoluto, enquanto a regressão separada apresentou o
-menor erro-padrão. A razão entre essas duas observações se explica pela baixa
-correlação $\rho_{xy} \approx 0{,}11$ entre \texttt{word\_count} e
-\texttt{total\_severity}: a regressão extrai pouco poder explicativo do
-auxiliar, e seu ganho sobre a média estratificada é marginal. O estimador
-razão é menos exigente quanto à linearidade, beneficiando-se aqui de
-proporcionalidade aproximada entre $y$ e $x$ dentro de cada estrato.
+\paragraph{Q3 — razão vs regressão.} A análise Monte Carlo
+(Tabela~\ref{tab:montecarlo}) mostra que, sob Neyman, a média estratificada
+simples e a regressão combinada empatam pelo menor EQM ($0{,}00115$), seguidas
+de perto pela regressão separada ($0{,}00151$); o razão combinado vem em
+quarto ($0{,}00222$) e o razão separado em último ($0{,}00319$). A
+regressão e a média estratificada são, portanto, equivalentes sob este
+desenho. Esse resultado --- aparentemente decepcionante para a regressão ---
+é coerente com a baixa correlação $\rho_{xy} \approx 0{,}11$ entre
+\texttt{word\_count} e \texttt{total\_severity}, que explica apenas
+$\rho_{xy}^{2} \approx 1{,}2\%$ da variância de $y$. Em outras palavras: o
+auxiliar adotado é demasiado fraco para que a regressão extraia ganho
+material sobre a média estratificada, e o ganho prometido pela teoria
+(Cochran~\cite{cochran1977}~§7) só se manifesta com $\rho_{xy}$
+substancialmente maior. Esta é uma limitação real da escolha experimental
+deste artigo, não da teoria.
 
 \paragraph{Limitações.} (i) Apenas \texttt{word\_count} é avaliada como
 auxiliar; \textit{features} mais ricas (\texttt{caps\_ratio},
